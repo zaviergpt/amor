@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+    </body>
+    <script>
+        const API = (function(){
+            return {
+                accounts: {
+                    async authorizeToken(token=null, username=null, twofactor=null) {
+                        request = await (await fetch("/accounts/authorize", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": btoa(JSON.stringify({
+                                    token: token
+                                }))
+                            }
+                        })).json()
+                        return request
+                    },
+                    async authorizeCredentials(username, twofactor) {
+                        request = await (await fetch("/accounts/authorize", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": btoa(JSON.stringify({
+                                    username: username,
+                                    twofactor: twofactor
+                                }))
+                            }
+                        })).json()
+                        return request
+                    },
+                    create(username) {
+                        
+                    }
+                },
+                events: {
+                    async searchQuery(token, query=null, latitude=null, longitude=null) {
+                        request = await (await fetch(`/events/search?query=${query.toLowerCase().split(" ").join("+")}`, {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": btoa(JSON.stringify({
+                                    token: token
+                                }))
+                            }
+                        })).json()
+                        return request
+                    },
+                    async searchLocation(token, latitude, longitude) {
+                        request = await (await fetch(`/events/search?latitude=${latitude}&longitude=${longitude}`, {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": btoa(JSON.stringify({
+                                    token: token
+                                }))
+                            }
+                        })).json()
+                        return request
+                    },
+                    async create(token, name, description, start_time, end_time, latitude, longitude) {
+                        request = await (await fetch("/events/create", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": btoa(JSON.stringify({
+                                    token: token
+                                }))
+                            },
+                            body: JSON.stringify({
+                                name: name,
+                                description: description,
+                                scheduled: {
+                                    start: start_time,
+                                    end: end_time
+                                },
+                                location: {
+                                    latitude: latitude,
+                                    longitude: longitude
+                                },
+                                public: true
+                            })
+                        })).json()
+                        return request
+                    }
+                }
+            }
+        })()
+        window.addEventListener("load", async () => {
+            profile = await API.accounts.authorizeToken(token="e9ff0a24-b257-414e-8065-3e16fb6ea74f")
+            console.log(profile)
+            console.log(events)
+        })
+    </script>
+</html>
