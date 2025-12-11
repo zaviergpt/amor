@@ -63,7 +63,7 @@ app.use(express.json())
 app.use((request, response, next) => {
     if (request.headers["sec-fetch-mode"] === "navigate") {
         if (request.headers["sec-fetch-dest"] === "document") {
-            if (!["/"].includes(request.url)) {
+            if (!["/", "/media"].includes(request.url)) {
                 
             } else {
                 next()
@@ -82,11 +82,13 @@ app.use((request, response, next) => {
             }
             console.log(request.url)
         } else next()
+    } else if (request.headers["sec-fetch-mode"] === "no-cors") {
+        next()
     }
 })
 
 app.get("/", (request, response) => {
-    response.sendFile(storage.media["aW5k"])
+    response.sendFile(storage.media["aG9t"])
 })
 
 app.use("/media", router.media)

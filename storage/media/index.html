@@ -1,11 +1,281 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title></title>
+        <title>Project Amor v1.0.0</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"/>
+         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
+            * {
+                border: 0;
+                padding: 0;
+                margin: 0;
+                outline: none;
+                user-select: none;
+                font-family: "Orbitron", sans-serif;
+                font-optical-sizing: auto;
+                transition: all 0.25s, font-weight 0s;
+            }
+            body {
+                font-size: 16px;
+                line-height: 16px;
+                background-color: #000000;
+                color: #FFFFFF;
+            }
+            .screen {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                display: none;
+                align-items: center;
+                justify-content: center;
+            }
+            .screen .tab {
+                display: none;
+            }
+            .screen#login-screen .tab#loading-tab h1.logo {
+                font-size: calc(16px * 1.75);
+                line-height: calc(16px * 1.75);
+                color: #FFFFFF;
+                width: 100%;
+            }
+            .screen#default-screen ul.navigation {
+                position: relative;
+                width: calc(16px * 20 - (16px * 2));
+                height: calc(100% - (16px * 2));
+                list-style-type: none;
+                padding: 16px;
+                display: block;
+            }
+            .screen#default-screen ul.navigation li:has(h1.logo) {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 16px 16px;
+                padding-bottom: calc(16px + 4px);
+                color: #AAAAAA;
+                font-size: 16px;
+            }
+            .screen#default-screen ul.navigation li:has(h1.logo) h1.logo {
+                color: #FFFFFF;
+                font-size: calc(16px * 1.25);
+                line-height: calc(16px * 1.25);
+                width: 100%;
+            }
+            .screen#default-screen ul.navigation li a {
+                display: block;
+                color: #FFFFFF;
+                font-size: calc(16px * 1.5);
+                line-height: calc(16px * 1.5);
+                text-decoration: none;
+                padding: 8px 16px;
+            }
+            .screen#default-screen ul.navigation li a.active, .screen#default-screen ul.navigation li a:hover {
+                font-weight: 600;
+                font-size: calc(16px * 1.5 * 1.5);
+                line-height: calc(16px * 1.5 * 1.5)
+            }
+            .screen#default-screen ul.navigation li a:not(.active):hover {
+                opacity: 0.5;
+            }
+            .screen#default-screen ul.navigation li a.active[onclick="selectTab('home-tab')"], .screen#default-screen ul.navigation li a[onclick="selectTab('home-tab')"]:hover {
+                color: #F93A2F;
+            }
+            .screen#default-screen ul.navigation li a.active[onclick="selectTab('missions-tab')"], .screen#default-screen ul.navigation li a[onclick="selectTab('missions-tab')"]:hover {
+                color: #F8C300;
+            }
+            .screen#default-screen ul.navigation li a.active[onclick="selectTab('communities-tab')"], .screen#default-screen ul.navigation li a[onclick="selectTab('communities-tab')"]:hover {
+                color: #00D166;
+            }
+            .screen#default-screen ul.navigation li a.active[onclick="selectTab('inbox-tab')"], .screen#default-screen ul.navigation li a[onclick="selectTab('inbox-tab')"]:hover {
+                color: #0099E1;
+            }
+            .screen#default-screen ul.navigation li:has(.info) {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                bottom: calc(16px + 8px);
+                left: 32px;
+                right: 32px;
+            }
+            .screen#default-screen ul.navigation li:has(.info) .info {
+                width: 100%;
+            }
+            .screen#default-screen ul.navigation li:has(.info) .info h1 {
+                font-size: calc(16px * 1.1);
+            }
+            .screen#default-screen ul.navigation li:has(.info) .info p {
+                font-size: calc(16px/1.1);
+                color: #AAAAAA
+            }
+            .screen#default-screen ul.navigation li:has(.info) button {
+                font-size: calc(16px * 1.375);
+                background-color: transparent;
+                color: #FFFFFF;
+            }
+            .screen#default-screen .tab#home-tab ul.dashboard {
+                display: flex;
+                flex-wrap: wrap;
+                list-style-type: none;
+                margin: 0px -16px;
+            }
+            .screen#default-screen .tab#home-tab ul.dashboard li {
+                border: 1.6px solid rgba(255, 255, 255, 0.125);
+                padding: 16px;
+                margin: 16px;
+                border-radius: 16px;
+                height: 100px;
+            }
+            .screen#default-screen .tab {
+                width: calc(100% - (16px * 20));
+                height: 100%;
+            }
+            .screen#default-screen .tab#missions-tab #missions-map {
+                width: 100%;
+                height: 100%;
+            }
+            .screen#default-screen .tab#missions-tab ul.missions {
+                backdrop-filter: blur(16px);
+                padding: 16px;
+                position: absolute;
+                top: 16px;
+                right: 16px;
+                z-index: 100000;
+                border: 1.6px solid rgba(255, 255, 255, 0.125);
+                border-radius: 16px;
+            }
+            .screen#default-screen .tab#missions-tab ul.missions h1.heading {
+
+            }
+            /*
+            .screen#default-screen .tutorial {
+                position: fixed;
+                left: 50%;
+                bottom: 16px;
+                transition: translate(-50%, -50%);
+                background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+                padding: calc(16px * 1.5) calc(100%/3);
+                font-size: calc(16px/1.1);
+                color: #DDDDDD;
+                text-align: center;
+            }
+            .screen#default-screen .tutorial h1 {
+                font-size: calc(16px * 1.1);
+                color: #FFFFFF;
+                margin-bottom: calc(16px/2)
+            }
+                */
+        </style>
     </head>
     <body>
+        <div class="screen" id="login-screen">
+            <div class="tab" id="login-tab"></div>
+            <div class="tab" id="loading-tab">
+                <h1 class="logo">PROJECT<br>AMOR</h1>
+            </div>
+        </div>
+        <div class="screen" id="default-screen">
+            <ul class="navigation">
+                <li><h1 class="logo">PROJECT<br>AMOR</h1><span>v1.0.0</span></li>
+                <li><a id="navigation-home" onclick="selectTab('home-tab')">Home</a></li>
+                <li><a id="navigation-missions" onclick="selectTab('missions-tab')">Missions</a></li>
+                <li><a id="navigation-communities" onclick="selectTab('communities-tab')">Communities</a></li>
+                <li><a id="navigation-inbox" onclick="selectTab('inbox-tab')">Inbox</a></li>
+                <li>
+                    <div class="info">
+                        <h1>Agent Zavier</h1>
+                        <p>@zaviergpt</p>
+                    </div>
+                    <button><i class="fa-solid fa-gear"></i></button>
+                </li>
+            </ul>
+            <div class="tab" id="home-tab" href="/home">
+                <canvas id="graph"></canvas>
+            </div>
+            <div class="tab" id="missions-tab" href="/missions">
+                <div id="missions-map"></div>
+                <ul class="missions">
+                    <li><h1>Your Missions</h1></li>
+                    <li></li>
+                </ul>
+            </div>
+            <div class="tab" id="communities-tab" href="/communities">
+
+            </div>
+            <div class="tab" id="inbox-tab" href="/inbox">
+            </div>
+            <div class="tutorial">
+
+            </div>
+        </div>
     </body>
     <script>
+        function speak(name, message) {
+            var characters = ""
+            const overlay = document.getElementsByClassName("tutorial")[0]
+            speaking = setInterval(function(){
+                if (characters.length === message.length) {
+                    clearInterval(speaking)
+                } else {
+                    characters += message[characters.length]
+                    overlay.innerHTML = `<h1>${name}</h1><p>${characters}</p>`
+                }
+            }, 100/1.5)
+        }
+        function selectTab(id) {
+            const tabs = document.getElementsByClassName("tab")
+            const screens = document.getElementsByClassName("screen")
+            var parent = null
+            for (var tab in tabs) {
+                tab = tabs[tab]
+                if (tab.className === "tab") {
+                    if (tab.id === id) {
+                        parent = tab.parentElement
+                        tab.style.display = "block"
+                        if (tab.id === "missions-tab" && !document.getElementById("missions-map").className) {
+                            map = L.map("missions-map").setView([51.505, -0.09], 13)
+                            L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+                                attribution: '&copy; <a href="https://www.openstreetmap.prg/copyright">OpenStreetMap</a>',
+                                maxZoom: 20
+                            }).addTo(map)
+                        }
+                    } else {
+                        tab.style.display = "none"
+                    }
+                }
+            }
+            for (var screen in screens) {
+                screen = screens[screen]
+                if (screen.className === "screen") {
+                    if (screen.id === parent.id) {
+                        screen.style.display = "flex"
+                    } else {
+                        screen.style.display = "none"
+                    }
+                }
+            }
+            if (["home", "missions", "communities", "inbox"].includes(id.split("-")[0])) {
+                for (var tab in tabs) {
+                    tab = tabs[tab]
+                    if (tab.className === "tab" && ["home", "missions", "communities", "inbox"].includes(tab.id.split("-")[0])) {
+                        if (tab.id === id) {
+                            if (tab.getAttribute("href")) window.history.pushState({}, "", tab.getAttribute("href"))
+                            document.getElementById(`navigation-${tab.id.split("-")[0]}`).className = "active"
+                        } else {
+                            document.getElementById(`navigation-${tab.id.split("-")[0]}`).className = ""
+                        }
+                    }
+                }
+            }
+        }
         const API = (function(){
             return {
                 accounts: {
@@ -91,10 +361,9 @@
                 }
             }
         })()
-        window.addEventListener("load", async () => {
-            profile = await API.accounts.authorizeToken(token="e9ff0a24-b257-414e-8065-3e16fb6ea74f")
-            console.log(profile)
-            console.log(events)
+        window.addEventListener("DOMContentLoaded", () => {
+            selectTab("home-tab")
         })
+        selectTab("loading-tab")
     </script>
 </html>
