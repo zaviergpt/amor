@@ -17,6 +17,7 @@
                 font-family: "Orbitron", sans-serif;
                 font-optical-sizing: auto;
                 transition: all 0.25s, font-weight 0s;
+                text-transform: uppercase;
             }
             body {
                 font-size: 16px;
@@ -37,6 +38,7 @@
             }
             .screen .tab {
                 display: none;
+                overflow: auto;
             }
             .screen#login-screen .tab#login-tab ul {
                 list-style-type: none;
@@ -54,6 +56,16 @@
                 display: block;
                 font-size: calc(16px/1.25);
                 margin-bottom: calc(16px/3)
+            }
+            .screen#login-screen .tab#login-tab ul li button {
+                border: 1.6px solid rgba(255, 255, 255, 0.125);
+                padding: calc(16px/1.25) calc((16px/1.25) * 1.25);
+                border-radius: 8px;
+                color: #FFFFFF;
+                font-size: 16px;
+                width: calc(75% - (1.6px * 2) - ((16px/1.25) * 1.25 * 2));
+                background-color: #00D166;
+                font-weight: 600;
             }
             .screen#default-screen ul.navigation {
                 position: relative;
@@ -101,7 +113,7 @@
             .screen#default-screen ul.navigation li a.active[onclick="selectTab('missions-tab')"], .screen#default-screen ul.navigation li a[onclick="selectTab('missions-tab')"]:hover {
                 color: #F8C300;
             }
-            .screen#default-screen ul.navigation li a.active[onclick="selectTab('communities-tab')"], .screen#default-screen ul.navigation li a[onclick="selectTab('communities-tab')"]:hover {
+            .screen#default-screen ul.navigation li a.active[onclick="selectTab('community-tab')"], .screen#default-screen ul.navigation li a[onclick="selectTab('community-tab')"]:hover {
                 color: #00D166;
             }
             .screen#default-screen ul.navigation li a.active[onclick="selectTab('inbox-tab')"], .screen#default-screen ul.navigation li a[onclick="selectTab('inbox-tab')"]:hover {
@@ -134,9 +146,62 @@
             }
             .screen#default-screen .tab#home-tab {
                 background-image: url("/media/c3Bh");
-                background-size: 25%;
+                background-size: 128px;
                 background-position: center;
                 background-repeat: repeat;
+                background-blend-mode: darken;
+            }
+            .screen#default-screen .tab#home-tab #earth {
+                width: calc(32px * 8);
+                aspect-ratio: 1;
+                border-radius: 50%;
+                margin: calc((32px * 8)/6) calc((100% - (32px * 8))/2);
+                animation: rotate 12.5s infinite;
+                transition: none;
+            }
+            .screen#default-screen .tab#home-tab #earth-progress-statistics {
+                font-size: calc(16px/1.125);
+                font-weight: 600;
+                margin-bottom: calc(16px/2.5);
+                text-align: center;
+                display: block;
+                color: #FFFFFF;
+            }
+            .screen#default-screen .tab#home-tab .progress {
+                backdrop-filter: blur(16px);
+                height: calc(16px/3);
+                background-color: rgba(255, 255, 255, 0.16);
+                width: calc(32px * 6);
+                overflow: hidden;
+                border-radius: 16px;
+            }
+            .screen#default-screen .tab#home-tab .progress #earth-progress {
+                background-color: #00D166;
+                height: 100%;
+                width: 0%;
+                border-radius: 16px;
+            }
+            @keyframes rotate {
+                0% {
+                    transform: scale(1)
+                } 50% {
+                    transform: scale(1.125)
+                } 100% {
+                    transform: scale(1)
+                }
+            }
+            .screen#default-screen .tab#home-tab h1 {
+                font-size: calc(16px * 1.5 * 1.5);
+                line-height: calc(16px * 1.5 * 1.5);
+                letter-spacing: calc((16px * 1.5 * 1.5)/-80);
+                text-align: center;
+                text-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25)
+            }
+            .screen#default-screen .tab#home-tab h1 p {
+                font-size: 16px;
+                line-height: 16px;
+                margin-top: calc(16px/3);
+                letter-spacing: calc(16px/-80)
             }
             .screen#default-screen .tab#home-tab ul.dashboard {
                 display: flex;
@@ -161,7 +226,7 @@
                 height: 100vh;
                 position: relative;
             }
-            .screen#default-screen .tab#missions-tab ul.missions {
+            .screen#default-screen .tab#missions-tab .missions {
                 backdrop-filter: blur(16px);
                 padding: 8px 20px;
                 position: absolute;
@@ -170,6 +235,8 @@
                 z-index: 100000;
                 border: 1.6px solid rgba(255, 255, 255, 0.125);
                 border-radius: 16px;
+            }
+            .screen#default-screen .tab#missions-tab .missions ul {
                 list-style-type: none;
             }
             .screen#default-screen .tab#missions-tab .missions ul li {
@@ -192,7 +259,7 @@
                 font-size: calc(16px/1.1);
                 line-height: calc(16px/1.1)
             }
-            .screen#default-screen .tab#missions-tab .missions ul li:not(:has(h1.heading, h2.subheading)):hover,  .screen#default-screen ul.navigation li:has(.info) button:hover {
+            .screen#default-screen .tab#missions-tab .missions ul li:not(:has(h1.heading, h2.subheading)):hover,  .screen#default-screen ul.navigation li:has(.info) button:hover, .screen#default-screen .tab#inbox-tab .overlay ul.mail li#mail-actions button:hover {
                 transform: scale(1.0375);
             }
             .screen#default-screen .tab#missions-tab .missions ul li:not(:has(h1.heading, h2.subheading)) .checkbox {
@@ -202,11 +269,14 @@
                 border: 1.6px solid rgba(255, 255, 255, 0.125);
                 margin-right: calc((16px * 1.75)/2)
             }
+            .screen#default-screen .tab#missions-tab .missions ul li:not(:has(h1.heading, h2.subheading)) p {
+                max-width: 190px;
+            }
             .screen#default-screen .tab#missions-tab .search {
                 position: absolute;
                 bottom: 16px;
                 left: 16px;
-                width: 250px;
+                width: calc(16px * 18.75);
                 z-index: 100000;
             }
             .screen#default-screen .tab#missions-tab .search ul.results {
@@ -221,11 +291,58 @@
                 border-radius: 8px;
                 color: #FFFFFF;
                 font-size: 16px;
+                width: calc(100% - (1.6px * 2) - ((16px/1.25) * 1.25 * 2));
                 background-color: transparent;
             }
-            .screen#default-screen .tab#communities-tab ul.communities {
-                width: calc(16px * 20 - 1.6px);
-                border-right: 1.6px solid rgba(255, 255, 255, 0.125);
+            .screen#default-screen .tab#community-tab .container {
+                backdrop-filter: blur(16px);
+                border: 1.6px solid rgba(255, 255, 255, 0.125);
+                width: 100%;
+                z-index: 10000;
+                margin: calc(16px * 3) 0px;
+            }
+            .screen#default-screen .tab#community-tab .container #community-input {
+                background-color: transparent;
+                color: #FFFFFF;
+                width: calc(100% - ((16px/1.25) * 1.25 * 2));
+                padding: calc(16px/1.25 + 4px) calc((16px/1.25) * 1.25);
+                padding-right: 16px;
+                height: calc(16px * 4);
+                resize: none;
+            }
+            .screen#default-screen .tab#community-tab .container #community-post {
+                color: #FFFFFF;
+                background-color: rgba(255, 255, 255, 0.125);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: calc(16px/1.1);
+                padding: calc(16px/1.25 + 4px) calc((16px/1.25) * 1.25);
+                width: 100%;
+            }
+            .screen#default-screen .tab#community-tab ul#posts {
+                margin: 8px 0px;
+                list-style-type: none;
+            }
+            .screen#default-screen .tab#community-tab ul#posts li {
+                margin: 24px 0px;
+            }
+            .screen#default-screen .tab#community-tab ul#posts .content {
+                width: 90%;
+                word-wrap: break-word;
+            }
+            .screen#default-screen .tab#community-tab ul#posts .info {
+                margin-bottom: calc(16px/3)
+            }
+            .screen#default-screen .tab#community-tab ul#posts .info h1 {
+                font-size: 16px;
+            }
+            .screen#default-screen .tab#community-tab ul#posts .info p {
+                font-size: calc(16px/1.5)
+            }
+            .screen#default-screen .tab#community-tab .container #community-post:hover {
+                background-color: #00D166;
+                font-weight: 600;
             }
             .screen#default-screen .tab#inbox-tab {
                 display: flex;
@@ -253,10 +370,10 @@
             .screen#default-screen .tab#inbox-tab .section ul#inbox li a {
                 display: flex;
                 align-items: center;
-                width: calc(100% - (8px * 1.5 * 2));
+                width: calc(100% - ((16px/1.1) * 1.5 * 2));
                 text-align: left;
-                padding: 8px calc(8px * 1.5);
-                font-size: 16px;
+                padding: calc(16px/1.1) calc((16px/1.1) * 1.5);
+                font-size: calc(16px/1.1);
                 background-color: transparent;
                 color: #FFFFFF;
                 text-decoration: none;
@@ -303,30 +420,31 @@
                 width: 75%;
             }
             .screen#default-screen .tab#inbox-tab .overlay ul.mail li {
-                padding: 8px calc(8px * 1.5);
+                padding: calc(16px/1.1) calc((16px/1.1) * 1.5);
                 border-bottom: 1.6px solid rgba(255, 255, 255, 0.125);
+                font-size: calc(16px/1.1);
+            }
+            .screen#default-screen .tab#inbox-tab .overlay ul.mail li#mail-actions {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .screen#default-screen .tab#inbox-tab .overlay ul.mail li#mail-actions button {
+                background-color: transparent;
+                border: 1.6px solid rgba(255, 255, 255, 0.125);
+                color: #FFFFFF;
+                padding: calc(16px/1.25) calc((16px/1.25) * 1.25 * 2);
+                margin: 0px 8px;
+                border-radius: calc(16px/1.25)
+            }
+            .screen#default-screen .tab#inbox-tab .overlay ul.mail li#mail-actions button#mail-accept:hover {
+                background-color: #00D166;
+                font-weight: 600;
+                color: #FFFFFF;
             }
             .screen#default-screen .tab#inbox-tab .overlay ul.mail li:last-child {
                 border-bottom: 0;
             }
-            /*
-            .screen#default-screen .tutorial {
-                position: fixed;
-                left: 50%;
-                bottom: 16px;
-                transition: translate(-50%, -50%);
-                background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
-                padding: calc(16px * 1.5) calc(100%/3);
-                font-size: calc(16px/1.1);
-                color: #DDDDDD;
-                text-align: center;
-            }
-            .screen#default-screen .tutorial h1 {
-                font-size: calc(16px * 1.1);
-                color: #FFFFFF;
-                margin-bottom: calc(16px/2)
-            }
-                */
         </style>
     </head>
     <body>
@@ -340,6 +458,7 @@
                         <span>Username</span>
                         <input type="text" id="login-username">
                     </li>
+                    <li><button id="login-continue">Continue <i class="fa-solid fa-arrow-right"></i></button></li>
                 </ul>
             </div>
             <div class="tab" id="loading-tab">
@@ -351,36 +470,48 @@
                 <li><h1 class="logo">PROJECT<br>AMOR❤️</h1><span>v1.0.0</span></li>
                 <li><a id="navigation-home" onclick="selectTab('home-tab')">Home</a></li>
                 <li><a id="navigation-missions" onclick="selectTab('missions-tab')">Missions</a></li>
-                <li><a id="navigation-communities" onclick="selectTab('communities-tab')">Communities</a></li>
+                <li><a id="navigation-community" onclick="selectTab('community-tab')">Community</a></li>
                 <li><a id="navigation-inbox" onclick="selectTab('inbox-tab')">Inbox</a></li>
                 <li>
                     <div class="info">
-                        <h1>Agent Zavier</h1>
-                        <p>@zaviergpt</p>
+                        <h1 id="info-username">Agent Zavier</h1>
+                        <p id="info-id">@zaviergpt</p>
                     </div>
                     <button><i class="fa-solid fa-gear"></i></button>
                 </li>
             </ul>
             <div class="tab" id="home-tab" href="/home">
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)">
+                    <h1>Earth <p id="earth-stage">Stage 1</p></h1>
+                    <img id="earth">
+                    <div>
+                        <span id="earth-progress-statistics"></span>
+                        <div class="progress">
+                            <div id="earth-progress"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="tab" id="missions-tab" href="/missions">
                 <div id="missions-map"></div>
                 <div class="missions">
-                    <ul class="missions">
+                    <ul id="missions">
                         <li><h1 class="heading">Your Missions</h1></li>
-                        <li><h2 class="subheading">Daily Tasks</h2></li>
-                        <li><div class="checkbox"></div> Take public transport</li>
-                        <li><h2 class="subheading">From Inbox</h2></li>
-                        <li></li>
                     </ul>
                 </div>
                 <div class="search">
                     <ul id="search-results"></ul>
-                    <input type="text" id="search-input">
+                    <input type="text" id="search-input" placeholder="Search for an event ...">
                 </div>
             </div>
-            <div class="tab" id="communities-tab" href="/communities">
-                
+            <div class="tab" id="community-tab" href="/community">
+                <div style="width: calc(100%/3 * 2); margin: 0px auto; position: relative; height: 100%">
+                    <div class="container">
+                        <textarea type="text" placeholder="Speak your mind out ..." id="community-input"></textarea>
+                        <button id="community-post">Post</button>
+                    </div>
+                    <ul class="posts" id="posts"></ul>
+                </div>
             </div>
             <div class="tab" id="inbox-tab" href="/inbox">
                 <div class="section">
@@ -392,11 +523,9 @@
                         <li id="mail-from"><b>From</b></li>
                         <li id="mail-title"></li>
                         <li id="mail-content"></li>
+                        <li id="mail-actions"></li>
                     </ul>
                 </div>
-            </div>
-            <div class="tutorial">
-
             </div>
         </div>
     </body>
@@ -404,6 +533,7 @@
         var map = null
         var profile = null
         var inbox = {}
+        var speaking = null
         const API = (function(){
             return {
                 accounts: {
@@ -525,21 +655,9 @@
                         return request
                     }
                 },
-                communities: {
-                    async search(token, query) {
-                        request = await (await fetch("/communities/search?query=" + query, {
-                            method: "GET",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "Authorization": btoa(JSON.stringify({
-                                    token: token
-                                }))
-                            }
-                        })).json()
-                        return request
-                    },
-                    async create(token, name, description, tags) {
-                        request = await (await fetch("/communities/create" + query, {
+                community: {
+                    async post(token, content) {
+                        request = await (await fetch("/community/post", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -548,15 +666,13 @@
                                 }))
                             },
                             body: JSON.stringify({
-                                name: name,
-                                description: description,
-                                tags: tags
+                                content: content
                             })
                         })).json()
                         return request
                     },
-                    async get(token, id) {
-                        request = await (await fetch("/communities/" + id, {
+                    async posts(token) {
+                        request = await (await fetch("/community", {
                             method: "GET",
                             headers: {
                                 "Content-Type": "application/json",
@@ -585,8 +701,9 @@
 
                     },
                     async accept(token, mailId) {
-                        request = await (await fetch("/missions/accept/" + mailId, {
-                            method: "GET",
+                        console.log(mailId)
+                        request = await (await fetch("/missions/accept", {
+                            method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
                                 "Authorization": btoa(JSON.stringify({
@@ -602,9 +719,9 @@
                 }
             }
         })()
-        function speak(message) {
+        function speak(id, message) {
             var characters = ""
-            const content = document.getElementById("mail-content")
+            const content = document.getElementById(id)
             speaking = setInterval(function(){
                 if (characters.length === message.length) {
                     clearInterval(speaking)
@@ -612,7 +729,8 @@
                     characters += message[characters.length]
                     content.innerHTML = characters
                 }
-            }, 100/1.5)
+            }, 100/(1.5 ** 3))
+            return speaking
         }
         async function selectTab(id) {
             const tabs = document.getElementsByClassName("tab")
@@ -639,10 +757,10 @@
                     }
                 }
             }
-            if (["home", "missions", "communities", "inbox"].includes(id.split("-")[0])) {
+            if (["home", "missions", "community", "inbox"].includes(id.split("-")[0])) {
                 for (var tab in tabs) {
                     tab = tabs[tab]
-                    if (tab.className === "tab" && ["home", "missions", "communities", "inbox"].includes(tab.id.split("-")[0])) {
+                    if (tab.className === "tab" && ["home", "missions", "community", "inbox"].includes(tab.id.split("-")[0])) {
                         if (tab.id === id) {
                             if (tab.getAttribute("href")) window.history.pushState({}, "", tab.getAttribute("href"))
                             document.getElementById(`navigation-${tab.id.split("-")[0]}`).className = "active"
@@ -654,7 +772,9 @@
             }
             console.log(id)
             if (id === "home-tab") {
-                console.log(profile)
+                earth = ["earth1", "earth2", "earth3", "earth4", "earth5", "earth6", "earth7"].map((earth, index) => [earth, (100 * (2 ** (index + 1))), index+1]).filter((earth) => profile[1].statistics.hearts < earth[1] && (profile[1].statistics.hearts > (earth[2]-1 > 0 ? (100 * (2 ** (earth[2]-1))) : 0)-1))[0]
+                document.getElementById("earth").src = "/media/" + btoa(earth[0]).slice(0, 8)
+                document.getElementById("earth-stage").textContent = `Stage ${earth[2]}`
             } else if (id === "missions-tab") {
                 if (!document.getElementById("missions-map").className && !map) {
                     map = L.map("missions-map").setView([51.505, -0.09], 13)
@@ -662,16 +782,42 @@
                     }).addTo(map)
                 }
                 console.log(profile)
-                missions = await API.missions.all(profile.token[0])
+                missions = [await API.missions.all(profile[1].token[0]), document.getElementById("missions"), document.createElement("li")]
+                missions[1].innerHTML = ""
+                missions[2].innerHTML = `<h1 class="heading">Your Missions</h1>`
+                missions[1].appendChild(missions[2])
+                Object.entries(missions[0]).forEach((mission) => {
+                    mission = [mission, document.createElement("li")]
+                    console.log(mission[0][1])
+                    mission[1].innerHTML = `<div class="checkbox"></div> <p>${mission[0][1].title}</p>`
+                    missions[1].appendChild(mission[1])
+                })
+                document.getElementById("search-input").addEventListener("keyup", (event) => {
+                    if (event.key === "Enter") {
+                        event.preventDefault()
+                    }
+                })
                 console.log(missions)
-            } else if (id === "communities-tab") {
-
+            } else if (id === "community-tab") {
+                posts = [await API.community.posts(profile[1].token[0]), document.getElementById("posts")]
+                document.getElementById("community-post").onclick = async function() {
+                    post = await API.community.post(profile[1].token[0], document.getElementById("community-input").value)
+                    document.getElementById("community-input").value = ""
+                    selectTab("community-tab")
+                }
+                posts[1].innerHTML = ""
+                posts[0].forEach((post) => {
+                    post = [post, document.createElement("li")]
+                    post[1].innerHTML = `<div class="info"><h1>${post[0].from[1]}</h1><p>@${post[0].from[0]}</div><div style="margin-top: 8px; padding: 16px; font-size: 16px; border: 1.6px solid rgba(255, 255, 255, 0.125);"><div class="content">${post[0].content}</div></div>`
+                    posts[1].appendChild(post[1])
+                })
             } else if (id === "inbox-tab") {
-                inbox = await API.inbox.all(profile.token[0])
+                inbox = await API.inbox.all(profile[1].token[0])
                 list = document.getElementById("inbox")
                 list.innerHTML = ""
                 Object.entries(inbox).forEach((mail) => {
                     mail = [mail, document.createElement("li")]
+                    console.log(mail)
                     mail[1].innerHTML = `<a href="#${btoa(JSON.stringify(["inbox", mail[0][0]]))}">
                         <p class="sender">${mail[0][1].from}</p>
                         <p class="title">${mail[0][1].title}</p>
@@ -685,11 +831,22 @@
                     profile = await API.accounts.authorizeToken(localStorage.getItem("session"))
                     if (profile.error) {
                         localStorage.removeItem("session")
+                        selectTab("login-tab")
                     } else {
+                        document.getElementById("info-username").textContent = "Agent " + profile[1].username
+                        document.getElementById("info-id").textContent = "@" + profile[0]
                         selectTab("home-tab")
                     }
                 } else {
                     selectTab("login-tab")
+                }
+            } else if (id === "login-tab") {
+                document.getElementById("login-continue").onclick = async function(){
+                    console.log(document.getElementById("login-username").value)
+                    profile = await API.accounts.authorizeCredentials(document.getElementById("login-username").value, "123456")
+                    console.log(profile)
+                    localStorage.setItem("session", profile[1].token[0])
+                    selectTab("home-tab")
                 }
             }
         }
@@ -700,8 +857,13 @@
                 if (event.hash[0] === "inbox") {
                     document.getElementById("inbox-overlay").style.display = "flex"
                     document.getElementById("mail-from").innerHTML = `<b>From</b> ` + inbox[event.hash[1]].from
-                    document.getElementById("mail-title").textContent = `<b>Title</b>` + inbox[event.hash[1]].title
-                    speak(inbox[event.hash[1]].content)
+                    document.getElementById("mail-title").innerHTML = `<b>Title</b> ` + inbox[event.hash[1]].title
+                    if (inbox[event.hash[1]].missions) {
+                        document.getElementById("mail-actions").innerHTML = `<button id="mail-accept" onclick="API.missions.accept(profile[1].token[0], '${event.hash[1]}'); document.getElementById('inbox-overlay').style.display = 'none'; clearInterval(speaking); selectTab('missions-tab')">Accept</button><button id="mail-decline" onclick="document.getElementById('inbox-overlay').style.display = 'none'; clearInterval(speaking); selectTab('inbox-tab')">Close</button>`
+                    } else {
+                        document.getElementById("mail-actions").innerHTML = `<button onclick="document.getElementById('inbox-overlay').style.display = 'none'; clearInterval(speaking); selectTab('inbox-tab')">Close</button>`
+                    }
+                    speak("mail-content", inbox[event.hash[1]].content)
                 }
                 console.log(event.hash)
             })
